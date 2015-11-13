@@ -7,6 +7,9 @@
 #include <string>
 
 // GLFW
+#ifdef HAVE_GLEW
+#include <GL/glew.h>
+#endif
 #include <GLFW/glfw3.h>
 #ifdef _WIN32
 #undef APIENTRY
@@ -18,19 +21,35 @@
 // Data
 struct ImGui_ImplGlfw
 {
-    GLFWwindow*  Window = NULL;
-    double       Time = 0.0f;
-    bool         MousePressed[3] = { false, false, false };
-    float        MouseWheel = 0.0f;
-    GLuint       FontTexture = 0;
-    GLuint       FragmentShader = 0;
-    GLuint       VertexShader = 0;
-    GLuint       Program = 0;
-    GLint        ModelViewProjection = -1;
-    GLint        Position = -1;
-    GLint        TexCoord = -1;
-    GLint        Color = -1;
-    GLint        Texture = -1;
+    ImGui_ImplGlfw()
+    : Window(NULL)
+    , Time(0)
+    , MouseWheel(0)
+    , FontTexture(0)
+    , FragmentShader(0)
+    , VertexShader(0)
+    , Program(0)
+    , ModelViewProjection(-1)
+    , Position(-1)
+    , TexCoord(-1)
+    , Color(-1)
+    , Texture(-1)
+    {
+        MousePressed[0] = MousePressed[1] = MousePressed[2] = false;
+    }
+    GLFWwindow*  Window;
+    double       Time;
+    bool         MousePressed[3];
+    float        MouseWheel;
+    GLuint       FontTexture;
+    GLuint       FragmentShader;
+    GLuint       VertexShader;
+    GLuint       Program;
+    GLint        ModelViewProjection;
+    GLint        Position;
+    GLint        TexCoord;
+    GLint        Color;
+    GLint        Texture;
 };
 
 #include <memory>
@@ -313,6 +332,15 @@ void ImGui_ImplGlfw_CreateProgram()
 
 void ImGui_ImplGlfw_InitGL()
 {
+#ifdef HAVE_GLEW
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        throw std::runtime_error("imgui-glfw: Failed to initialize GLEW");
+    }
+    if (!GLEW_VERSION_2_0) {
+        throw std::runtime_error("imgui-glfw: OpenGL 2.0 not supported");
+    }
+#endif
     ImGui_ImplGlfw_CreateShader(GL_VERTEX_SHADER, kVertexShaderSrc, g->VertexShader);
     ImGui_ImplGlfw_CreateShader(GL_FRAGMENT_SHADER, kFragmentShaderSrc, g->FragmentShader);
     ImGui_ImplGlfw_CreateProgram();
