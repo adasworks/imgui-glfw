@@ -89,7 +89,7 @@ const char* kFragmentShaderSrc =
    "{                                                        \n"
    "    vec4 vc = v_v4Color;                                \n"
    "    vec4 tc = texture2D(u_sTexture, v_v2TexCoord);        \n"
-   "    gl_FragColor = vec4(vc.rgb, vc.a * tc.a);            \n"
+   "    gl_FragColor = vc*tc;                                \n"
    "}                                                        \n";
 
 struct PushState {
@@ -241,14 +241,14 @@ bool ImGui_ImplGlfw_CreateDeviceObjects()
     // Build texture
     unsigned char* pixels;
     int width, height;
-    io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
     // Create texture
     glGenTextures(1, &g->FontTexture);
     glBindTexture(GL_TEXTURE_2D, g->FontTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
     // Store our identifier
     io.Fonts->TexID = (void *)(intptr_t)g->FontTexture;
