@@ -33,6 +33,7 @@ target_link_libraries(imgui
     glm
     glfw
 )
+set_target_properties(imgui PROPERTIES DEBUG_POSTFIX d)
 if (glew_FOUND)
     target_link_libraries(imgui GLEW::glew_s)
     target_compile_definitions(imgui PRIVATE -DHAVE_GLEW)
