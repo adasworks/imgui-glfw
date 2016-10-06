@@ -6,7 +6,7 @@ set(imgui_dir ${CMAKE_CURRENT_LIST_DIR})
 
 find_package(glm REQUIRED)
 find_package(glfw3 REQUIRED)
-find_package(glew QUIET CONFIG)
+find_package(GLEW QUIET CONFIG)
 
 set(imgui_public_hdrs
     ${imgui_dir}/imgui.h
@@ -34,9 +34,12 @@ target_link_libraries(imgui
     glfw
 )
 set_target_properties(imgui PROPERTIES DEBUG_POSTFIX d)
-if (glew_FOUND)
+if (GLEW_FOUND)
+    message(STATUS "GLEW found")
     target_link_libraries(imgui GLEW::glew_s)
     target_compile_definitions(imgui PRIVATE -DHAVE_GLEW)
+else()
+    message(STATUS "GLEW not found")
 endif()
 install(TARGETS imgui EXPORT imgui-target DESTINATION lib)
 install(FILES ${imgui_public_hdrs} DESTINATION include/imgui)
