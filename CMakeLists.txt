@@ -24,6 +24,7 @@ add_library(imgui
     ${imgui_dir}/imgui_draw.cpp
     imgui_glfw.cpp
 )
+add_library(::imgui ALIAS imgui)
 target_include_directories(imgui PUBLIC
     $<BUILD_INTERFACE:${imgui_dir}>
     $<INSTALL_INTERFACE:include/imgui>
@@ -45,3 +46,9 @@ install(FILES ${CMAKE_BINARY_DIR}/imgui-config.cmake DESTINATION lib/cmake/imgui
 install(TARGETS imgui EXPORT imgui-targets DESTINATION lib)
 install(FILES ${imgui_public_hdrs} DESTINATION include/imgui)
 install(EXPORT imgui-targets NAMESPACE :: DESTINATION lib/cmake/imgui)
+
+option(BUILD_SAMPLES "Build example projects with cmake support" ON)
+if (BUILD_SAMPLES)
+    add_subdirectory(examples/cmake)
+    install(DIRECTORY examples/cmake/ DESTINATION examples/imgui_demo)
+endif()
