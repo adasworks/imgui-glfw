@@ -1,8 +1,7 @@
 #pragma once
 
 #include <imgui.h>
-
-struct GLFWwindow;
+#include <GLFW/glfw3.h>
 
 bool        ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks);
 void        ImGui_ImplGlfw_Shutdown();
