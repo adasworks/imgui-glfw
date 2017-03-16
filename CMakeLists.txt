@@ -22,7 +22,6 @@ add_library(imgui
     ${imgui_dir}/imgui_internal.h
     ${imgui_dir}/imgui.cpp
     ${imgui_dir}/imgui_draw.cpp
-
     imgui_glfw.cpp
 )
 target_include_directories(imgui PUBLIC
@@ -30,17 +29,19 @@ target_include_directories(imgui PUBLIC
     $<INSTALL_INTERFACE:include/imgui>
 )
 target_link_libraries(imgui
-    glm
-    glfw
+    PUBLIC glfw
+    PRIVATE glm
 )
 set_target_properties(imgui PROPERTIES DEBUG_POSTFIX d)
 if (GLEW_FOUND)
     message(STATUS "GLEW found")
-    target_link_libraries(imgui GLEW::glew_s)
+    target_link_libraries(imgui PRIVATE GLEW::glew_s)
     target_compile_definitions(imgui PRIVATE -DHAVE_GLEW)
 else()
     message(STATUS "GLEW not found")
 endif()
-install(TARGETS imgui EXPORT imgui-target DESTINATION lib)
+configure_file(imgui-config.cmake.in imgui-config.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/imgui-config.cmake DESTINATION lib/cmake/imgui)
+install(TARGETS imgui EXPORT imgui-targets DESTINATION lib)
 install(FILES ${imgui_public_hdrs} DESTINATION include/imgui)
-install(EXPORT imgui-target DESTINATION lib/cmake/imgui FILE imgui-config.cmake)
+install(EXPORT imgui-targets NAMESPACE :: DESTINATION lib/cmake/imgui)

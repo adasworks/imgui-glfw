@@ -1,8 +1,6 @@
 // ImGui GLFW binding with OpenGL
 // https://github.com/ocornut/imgui
 
-#include <imgui.h>
-#include "imgui_glfw.h"
 #include <stdexcept>
 #include <string>
 
@@ -10,7 +8,7 @@
 #ifdef HAVE_GLEW
 #include <GL/glew.h>
 #endif
-#include <GLFW/glfw3.h>
+#include "imgui_glfw.h"
 #ifdef _WIN32
 #undef APIENTRY
 #define GLFW_EXPOSE_NATIVE_WIN32
