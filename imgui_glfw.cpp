@@ -189,12 +189,12 @@ void ImGui_ImplGlfw_RenderDrawLists(ImDrawData* draw_data)
     glUseProgram(prog);
 }
 
-static const char* ImGui_ImplGlfw_GetClipboardText()
+static const char* ImGui_ImplGlfw_GetClipboardText(void *data)
 {
     return glfwGetClipboardString(g->Window);
 }
 
-static void ImGui_ImplGlfw_SetClipboardText(const char* text)
+static void ImGui_ImplGlfw_SetClipboardText(void *data, const char* text)
 {
     glfwSetClipboardString(g->Window, text);
 }
