@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include "imgui_glfw.h"
+#include "imgui_tabs/imgui_tabs.h"
 
 #define THROW_IF(x,msg) { if ((x)) { throw std::runtime_error(msg); } }
 
@@ -42,6 +43,7 @@ int main(int argc, char* argv[])
 
         bool show_test_window = true;
         bool show_another_window = false;
+        bool show_tab_window = true;
         ImVec4 clear_color = ImColor(114, 144, 154);
 
         // Main loop
@@ -76,6 +78,55 @@ int main(int argc, char* argv[])
             {
                 ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
                 ImGui::ShowTestWindow(&show_test_window);
+            }
+
+            if (show_tab_window)
+            {
+                ImGui::Begin("ImGui Tabs");
+                ImGui::BeginTabBar("Settings#left_tabs_bar");
+                if (ImGui::AddTab("General")) {
+                    static bool fullscreen = false;
+                    if (ImGui::Checkbox("Fullscreen Mode", &fullscreen)) {
+                    }
+                    static bool enableMultisampling = false;
+                    if (ImGui::Checkbox("Enable Multisampling", &enableMultisampling)) {
+
+                    }
+
+                    static int multisampleCount = 4;
+                    if (ImGui::SliderInt("MSAA Count", &multisampleCount, 1, 9)) {
+
+                    }
+                }
+                if (ImGui::AddTab("GUI")) {
+                    ImGui::Text("Tab 2");
+                }
+                if (ImGui::AddTab("Tab Name")) {
+                    ImGui::Text("Tab 3");
+                }
+                if (ImGui::AddTab("Tab Name")) {
+                    ImGui::Text("Tab 4");
+                }
+                ImGui::EndTabBar();
+
+                ImGui::Dummy(ImVec2(0, 20));
+
+                ImGui::BeginTabBar("#Additional Parameters");
+                float value = 0.0f;
+                if (ImGui::AddTab("Tab Name2")) {
+                    ImGui::SliderFloat("Slider", &value, 0, 1.0f);
+                }
+                if (ImGui::AddTab("Tab Name3")) {
+                    ImGui::Text("Tab 2");
+                }
+                if (ImGui::AddTab("Tab Name4")) {
+                    ImGui::Text("Tab 3");
+                }
+                if (ImGui::AddTab("Tab Name5")) {
+                    ImGui::Text("Tab 4");
+                }
+                ImGui::EndTabBar();
+                ImGui::End();
             }
 
             // Rendering

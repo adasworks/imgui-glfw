@@ -15,16 +15,19 @@ set(imgui_public_hdrs
     ${imgui_dir}/stb_rect_pack.h
     ${imgui_dir}/stb_textedit.h
     ${imgui_dir}/stb_truetype.h
+    ${imgui_dir}/imgui_tabs/imgui_tabs.h
 )
 
 add_library(imgui
     ${imgui_public_hdrs}
     ${imgui_dir}/imgui_internal.h
+    ${imgui_dir}/imgui_tabs/imgui_tabs.cpp
     ${imgui_dir}/imgui.cpp
     ${imgui_dir}/imgui_draw.cpp
     imgui_glfw.cpp
 )
 add_library(::imgui ALIAS imgui)
+target_compile_definitions(imgui PRIVATE IMGUI_DEFINE_MATH_OPERATORS)
 target_include_directories(imgui PUBLIC
     $<BUILD_INTERFACE:${imgui_dir}>
     $<INSTALL_INTERFACE:include/imgui>
