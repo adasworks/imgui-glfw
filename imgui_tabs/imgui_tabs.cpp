@@ -257,7 +257,7 @@ void ImGui::TabBar::_drawTabBarBottom() {
     ImGuiDrawContext& dc = wind->DC;
 
     const ImVec2 padding = style.WindowPadding;
-    const ImVec2 pos = ImVec2(wind->Size.x - padding.x, dc.CursorPos.y + padding.y);
+    const ImVec2 pos = ImVec2(wind->Pos.x + wind->Size.x - padding.x, dc.CursorPos.y + padding.y);
     const float height = pos.y - upperLeft.y;
     dl->AddRectFilled(upperLeft, pos,ImColor(1.0f,1.0f,1.0f,0.15f),corner_rounding,ImGuiCorner_BottomLeft | ImGuiCorner_BottomRight);
     dl->AddRect(upperLeft, pos,ImColor(1.0f,1.0f,1.0f,0.15f),corner_rounding,ImGuiCorner_BottomLeft | ImGuiCorner_BottomRight);
