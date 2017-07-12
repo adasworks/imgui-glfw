@@ -68,22 +68,10 @@
 #ifndef IMGUI_TABS_HPP
 #define IMGUI_TABS_HPP
 
+#include <string>
 #include <vector>
 #include "imgui.h"
-#include "imgui_internal.h"
 
-
-// Extra Math Helpers (Set the proper define below in imgui_internal.h)
-#ifdef IMGUI_DEFINE_MATH_OPERATORS
-static inline ImVec4 operator+(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z, lhs.w+rhs.w); }
-static inline ImVec4 operator*(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x*rhs.x, lhs.y*rhs.y, lhs.z*rhs.z, lhs.w*rhs.w); }
-static inline ImVec4 operator/(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x/rhs.x, lhs.y/rhs.y, lhs.z/rhs.z, lhs.w/rhs.w); }
-
-static inline ImVec4& operator+=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x += rhs.x; lhs.y += rhs.y; lhs.z += rhs.z; lhs.w += rhs.w; return lhs;}
-static inline ImVec4& operator-=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x -= rhs.x; lhs.y -= rhs.y; lhs.z -= rhs.z; lhs.w -= rhs.w; return lhs;}
-static inline ImVec4& operator*=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x *= rhs.x; lhs.y *= rhs.y; lhs.z *= rhs.z; lhs.w *= rhs.w; return lhs;}
-static inline ImVec4& operator/=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x /= rhs.x; lhs.y /= rhs.y; lhs.z /= rhs.z; lhs.w /= rhs.w; return lhs;}
-#endif
 
 namespace ImGui
 {

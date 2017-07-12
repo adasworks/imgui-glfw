@@ -30,6 +30,20 @@
 
 
 #include "imgui_tabs.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imgui_internal.h"
+
+// Extra Math Helpers (Set the proper define below in imgui_internal.h)
+#ifdef IMGUI_DEFINE_MATH_OPERATORS
+static inline ImVec4 operator+(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z, lhs.w+rhs.w); }
+static inline ImVec4 operator*(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x*rhs.x, lhs.y*rhs.y, lhs.z*rhs.z, lhs.w*rhs.w); }
+static inline ImVec4 operator/(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x/rhs.x, lhs.y/rhs.y, lhs.z/rhs.z, lhs.w/rhs.w); }
+
+static inline ImVec4& operator+=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x += rhs.x; lhs.y += rhs.y; lhs.z += rhs.z; lhs.w += rhs.w; return lhs;}
+static inline ImVec4& operator-=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x -= rhs.x; lhs.y -= rhs.y; lhs.z -= rhs.z; lhs.w -= rhs.w; return lhs;}
+static inline ImVec4& operator*=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x *= rhs.x; lhs.y *= rhs.y; lhs.z *= rhs.z; lhs.w *= rhs.w; return lhs;}
+static inline ImVec4& operator/=(ImVec4& lhs, const ImVec4& rhs)            { lhs.x /= rhs.x; lhs.y /= rhs.y; lhs.z /= rhs.z; lhs.w /= rhs.w; return lhs;}
+#endif
 
 ImGui::ImGuiUserStyle::ImGuiUserStyle(){
     Colors[ImGuiUserCol_TabNormal] = ImVec4(0.65f, 0.65f, 0.68f, 1.00f);
@@ -191,6 +205,7 @@ void ImGui::TabBar::_drawTabBarTop(const char *label) {
 
             bool hovered, held;
             bool pressed = ButtonBehavior(bb, tabHashes[i], &hovered, &held);
+            (void) pressed;
             if (held)
                 newSelected = i;
 
@@ -258,7 +273,7 @@ void ImGui::TabBar::_drawTabBarBottom() {
 
     const ImVec2 padding = style.WindowPadding;
     const ImVec2 pos = ImVec2(wind->Pos.x + wind->Size.x - padding.x, dc.CursorPos.y + padding.y);
-    const float height = pos.y - upperLeft.y;
+    //const float height = pos.y - upperLeft.y;
     dl->AddRectFilled(upperLeft, pos,ImColor(1.0f,1.0f,1.0f,0.15f),corner_rounding,ImGuiCorner_BottomLeft | ImGuiCorner_BottomRight);
     dl->AddRect(upperLeft, pos,ImColor(1.0f,1.0f,1.0f,0.15f),corner_rounding,ImGuiCorner_BottomLeft | ImGuiCorner_BottomRight);
 

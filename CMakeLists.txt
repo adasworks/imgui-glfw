@@ -27,7 +27,6 @@ add_library(imgui
     imgui_glfw.cpp
 )
 add_library(::imgui ALIAS imgui)
-target_compile_definitions(imgui PRIVATE IMGUI_DEFINE_MATH_OPERATORS)
 target_include_directories(imgui PUBLIC
     $<BUILD_INTERFACE:${imgui_dir}>
     $<INSTALL_INTERFACE:include/imgui>
