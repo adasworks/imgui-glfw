@@ -166,7 +166,7 @@ void ImGui::TabBar::_drawTabBarTop(const char *label) {
     // This is the border shrink in px. Not sure why it needs to be 1, but it works. Adjust to your border size
     static constexpr const float shrink = 1.0f;
 
-    const float tab_height = CalcTextSize(tabTitles[0]).y + (frame_padding.y * 2);
+    const float tab_height = CalcTextSize(tabTitles[0].c_str()).y + (frame_padding.y * 2);
 
     float selected_offset = 0;
     ImVec2 selected_expands;
@@ -220,9 +220,9 @@ void ImGui::TabBar::_drawTabBarTop(const char *label) {
             _drawPartialRect(bb.Min, bb.Max,rounding, ImGuiCorner_TopLeft | ImGuiCorner_TopRight, dl,
                              (_EdgeType) (EDGE_LEFT | EDGE_RIGHT | EDGE_TOP), GetColorU32(ImGuiUserCol_TabBorderShadow));
             // Draw the text
-            const ImVec2 text_size = CalcTextSize(tabTitles[i]);
+            const ImVec2 text_size = CalcTextSize(tabTitles[i].c_str());
             const ImVec2 text_pos = pos + ImVec2(offs+((xr-xl) - text_size.x)/2.0f,((text_size.y - frame_padding.y*2.0f)/2.0f));
-            dl->AddText(text_pos,GetColorU32(ImGuiUserCol_TabTitleTextNormal),tabTitles[i]);
+            dl->AddText(text_pos,GetColorU32(ImGuiUserCol_TabTitleTextNormal),tabTitles[i].c_str());
 
 
         } else{
@@ -253,10 +253,10 @@ void ImGui::TabBar::_drawTabBarTop(const char *label) {
                      (_EdgeType) (EDGE_LEFT | EDGE_RIGHT | EDGE_TOP), GetColorU32(ImGuiUserCol_TabBorderShadow),
                      true,selected_shadow_edges);
     // Draw the text
-    const ImVec2 text_size = CalcTextSize(tabTitles[selected_idx]);
+    const ImVec2 text_size = CalcTextSize(tabTitles[selected_idx].c_str());
     const ImVec2 text_pos = pos + ImVec2(selected_offset+((xr-xl) - text_size.x)/2.0f - selected_expands.x,((text_size.y - frame_padding.y*2.0f)/2.0f));
-    dl->AddText(text_pos+ImVec2(1,1),GetColorU32(ImGuiUserCol_TabTitleTextNormal),tabTitles[selected_idx]); // Shadow
-    dl->AddText(text_pos,GetColorU32(ImGuiUserCol_TabTitleTextSelected),tabTitles[selected_idx]);
+    dl->AddText(text_pos+ImVec2(1,1),GetColorU32(ImGuiUserCol_TabTitleTextNormal),tabTitles[selected_idx].c_str()); // Shadow
+    dl->AddText(text_pos,GetColorU32(ImGuiUserCol_TabTitleTextSelected),tabTitles[selected_idx].c_str());
 
     dc.CursorPos += ImVec2(0,tab_height + padding.y); // Add all the extra height used above.
     upperLeft = dc.CursorPos - ImVec2(0,padding.y);

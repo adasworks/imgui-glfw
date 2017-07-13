@@ -120,7 +120,7 @@ namespace ImGui
         TabBar(const char* label, const ImVec2 tab_bar_size);
 
         /// Stores the titles of the tabs
-        std::vector<const char*> tabTitles;
+        std::vector<std::string> tabTitles;
 
         /// Stores hash IDs of the tabs
         std::vector<ImGuiID> tabHashes;
