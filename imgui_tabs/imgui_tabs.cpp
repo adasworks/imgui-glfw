@@ -142,8 +142,9 @@ const int ImGui::TabBar::getActiveTab() {
 }
 
 void ImGui::TabBar::_drawTabBarTop(const char *label) {
-    if (!hasBeenInitialized)
+    if (!hasBeenInitialized || tabCount == 0)
         return;
+
     // Gather pointers and references
     ImGuiWindow* wind = ImGui::GetCurrentWindow();
     ImDrawList* dl = wind->DrawList;
@@ -377,7 +378,7 @@ const bool ImGui::AddTab(const char *title) {
 
 void ImGui::EndTabBar() {
     TabBar* bar = TabStack.getCurrentTabBar();
-    if (bar->hasBeenInitialized)
+    if (bar->hasBeenInitialized && bar->tabCount > 0)
         bar->_drawTabBarBottom();
     bar->_setTabCount();
 }

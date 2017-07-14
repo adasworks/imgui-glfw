@@ -109,6 +109,9 @@ int main(int argc, char* argv[])
                 }
                 ImGui::EndTabBar();
 
+                ImGui::BeginTabBar("Empty");
+                ImGui::EndTabBar();
+
                 ImGui::Dummy(ImVec2(0, 20));
 
                 ImGui::BeginTabBar("#Additional Parameters");
