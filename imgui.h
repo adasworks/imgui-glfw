@@ -104,6 +104,16 @@ struct ImVec4
 #endif
 };
 
+// Data saved in imgui.ini file
+struct ImGuiIniData
+{
+    char*       Name;
+    ImGuiID     Id;
+    ImVec2      Pos;
+    ImVec2      Size;
+    bool        Collapsed;
+};
+
 // ImGui end-user API
 // In a namespace so that user can add extra functions in a separate file (e.g. Value() helpers for your vector or common types)
 namespace ImGui
@@ -112,6 +122,7 @@ namespace ImGui
     IMGUI_API ImGuiIO&      GetIO();
     IMGUI_API ImGuiStyle&   GetStyle();
     IMGUI_API ImDrawData*   GetDrawData();                              // same value as passed to your io.RenderDrawListsFn() function. valid after Render() and until the next call to NewFrame()
+
     IMGUI_API void          NewFrame();                                 // start a new ImGui frame, you can submit any command from this point until NewFrame()/Render().
     IMGUI_API void          Render();                                   // ends the ImGui frame, finalize rendering data, then call your io.RenderDrawListsFn() function if set.
     IMGUI_API void          Shutdown();
@@ -461,6 +472,12 @@ namespace ImGui
     IMGUI_API void          DestroyContext(ImGuiContext* ctx);
     IMGUI_API ImGuiContext* GetCurrentContext();
     IMGUI_API void          SetCurrentContext(ImGuiContext* ctx);
+
+    IMGUI_API void LoadIniSettingsFromDisk(const char* ini_filename);
+    IMGUI_API void SaveIniSettingsToDisk(const char* ini_filename);
+
+    IMGUI_API ImGuiIniData* FindWindowSettings(const char* name);
+    IMGUI_API ImGuiIniData* AddWindowSettings(const char* name);
 
     // Obsolete (will be removed)
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
