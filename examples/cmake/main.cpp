@@ -12,11 +12,8 @@ int main(int argc, char* argv[])
         THROW_IF(glfwInit() != GL_TRUE, "Failed to init GLFW");
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#ifdef GLFW_USE_GLESV2
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#else
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-#endif
+        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
         // This is required with VirtualBox: "X Error of failed request:
         // BadMatch (invalid parameter attributes)"

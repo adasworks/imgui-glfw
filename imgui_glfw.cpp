@@ -4,15 +4,13 @@
 #include <stdexcept>
 #include <string>
 
-// GLFW
-#ifdef HAVE_GLEW
-#include <GL/glew.h>
-#endif
+#define GLFW_INCLUDE_ES2
+#define GLFW_INCLUDE_GLEXT
 #include "imgui_glfw.h"
 #ifdef _WIN32
 #undef APIENTRY
 #define GLFW_EXPOSE_NATIVE_WIN32
-#define GLFW_EXPOSE_NATIVE_WGL
+#define GLFW_EXPOSE_NATIVE_EGL
 #include <GLFW/glfw3native.h>
 #endif
 
