@@ -34,6 +34,10 @@ target_link_libraries(imgui
     PUBLIC glfw
     PRIVATE glm
 )
+if (WIN32)
+    find_path(GLES2_INCLUDE_DIRS GLES2/gl2.h)
+    target_include_directories(imgui PRIVATE ${GLES2_INCLUDE_DIRS})
+endif()
 set_target_properties(imgui PROPERTIES DEBUG_POSTFIX d)
 configure_file(imgui-config.cmake.in imgui-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/imgui-config.cmake DESTINATION lib/cmake/imgui)
