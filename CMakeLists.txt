@@ -10,21 +10,26 @@ find_package(GLEW QUIET CONFIG)
 
 set(imgui_public_hdrs
     ${imgui_dir}/imgui.h
+    ${imgui_dir}/imgui_internal.h
     ${imgui_dir}/imconfig.h
-    ${imgui_dir}/imgui_glfw.h
-    ${imgui_dir}/stb_rect_pack.h
-    ${imgui_dir}/stb_textedit.h
-    ${imgui_dir}/stb_truetype.h
-    ${imgui_dir}/imgui_tabs/imgui_tabs.h
+    ${imgui_dir}/imstb_rectpack.h
+    ${imgui_dir}/imstb_textedit.h
+    ${imgui_dir}/imstb_truetype.h
+    ${imgui_dir}/implot/implot.h
+    ${imgui_dir}/implot/implot_internal.h
+    ${imgui_dir}/examples/imgui_impl_opengl3.h
+    ${imgui_dir}/examples/imgui_impl_glfw.h
 )
 
 add_library(imgui
     ${imgui_public_hdrs}
-    ${imgui_dir}/imgui_internal.h
-    ${imgui_dir}/imgui_tabs/imgui_tabs.cpp
+    ${imgui_dir}/implot/implot.cpp
+    ${imgui_dir}/implot/implot_items.cpp
     ${imgui_dir}/imgui.cpp
     ${imgui_dir}/imgui_draw.cpp
-    imgui_glfw.cpp
+    ${imgui_dir}/imgui_widgets.cpp
+    ${imgui_dir}/examples/imgui_impl_opengl3.cpp
+    ${imgui_dir}/examples/imgui_impl_glfw.cpp
 )
 add_library(::imgui ALIAS imgui)
 target_include_directories(imgui PUBLIC
@@ -43,6 +48,7 @@ if (GLEW_FOUND)
 else()
     message(STATUS "GLEW not found")
 endif()
+
 configure_file(imgui-config.cmake.in imgui-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/imgui-config.cmake DESTINATION lib/cmake/imgui)
 install(TARGETS imgui EXPORT imgui-targets DESTINATION lib)
