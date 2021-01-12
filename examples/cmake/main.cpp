@@ -1,8 +1,10 @@
 #include <stdexcept>
 #include <cstdio>
 
-#include "imgui_glfw.h"
-#include "imgui_tabs/imgui_tabs.h"
+#include <GLFW/glfw3.h>
+#include "examples/imgui_impl_opengl3.h"
+#include "examples/imgui_impl_glfw.h"
+#include "implot/implot.h"
 
 #define THROW_IF(x,msg) { if ((x)) { throw std::runtime_error(msg); } }
 
@@ -12,11 +14,8 @@ int main(int argc, char* argv[])
         THROW_IF(glfwInit() != GL_TRUE, "Failed to init GLFW");
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#ifdef GLFW_USE_GLESV2
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#else
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-#endif
+        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
         // This is required with VirtualBox: "X Error of failed request:
         // BadMatch (invalid parameter attributes)"
@@ -25,7 +24,13 @@ int main(int argc, char* argv[])
         GLFWwindow* window = glfwCreateWindow(1280, 720, "ImGui + GLFW3", 0, 0);
         THROW_IF(window == 0, "Failed to create window");
         glfwMakeContextCurrent(window);
-        ImGui_ImplGlfw_Init(window, true);
+
+        ImGui::CreateContext();
+        ImPlot::CreateContext();
+        ImPlot::SetImGuiContext(ImGui::GetCurrentContext());
+
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 100");
 
         printf("GL_RENDERER: %s\n", glGetString(GL_RENDERER));
         printf("GL_VERSION:  %s\n", glGetString(GL_VERSION));
@@ -42,6 +47,7 @@ int main(int argc, char* argv[])
         //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
 
         bool show_test_window = true;
+        bool show_plot_test_window = true;
         bool show_another_window = false;
         bool show_tab_window = true;
         ImVec4 clear_color = ImColor(114, 144, 154);
@@ -50,7 +56,10 @@ int main(int argc, char* argv[])
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
+            ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
 
             // 1. Show a simple window
             // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
@@ -60,6 +69,7 @@ int main(int argc, char* argv[])
                 ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
                 ImGui::ColorEdit3("clear color", (float*)&clear_color);
                 if (ImGui::Button("Test Window")) show_test_window ^= 1;
+                if (ImGui::Button("ImPlot Test Window")) show_plot_test_window ^= 1;
                 if (ImGui::Button("Another Window")) show_another_window ^= 1;
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             }
@@ -67,24 +77,29 @@ int main(int argc, char* argv[])
             // 2. Show another simple window, this time using an explicit Begin/End pair
             if (show_another_window)
             {
-                ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);
+                ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiCond_FirstUseEver);
                 ImGui::Begin("Another Window", &show_another_window);
                 ImGui::Text("Hello");
                 ImGui::End();
             }
 
-            // 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
+            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow()
             if (show_test_window)
             {
-                ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
-                ImGui::ShowTestWindow(&show_test_window);
+                ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver);
+                ImGui::ShowDemoWindow(&show_test_window);
+            }
+
+            if (show_plot_test_window)
+            {
+                ImPlot::ShowDemoWindow(&show_plot_test_window);
             }
 
             if (show_tab_window)
             {
                 ImGui::Begin("ImGui Tabs");
-                ImGui::BeginTabBar("Settings#left_tabs_bar");
-                if (ImGui::AddTab("General")) {
+                ImGui::BeginTabBar("Settings#left_tabs_bar", ImGuiTabBarFlags_None);
+                if (ImGui::BeginTabItem("General")) {
                     static bool fullscreen = false;
                     if (ImGui::Checkbox("Fullscreen Mode", &fullscreen)) {
                     }
@@ -97,36 +112,44 @@ int main(int argc, char* argv[])
                     if (ImGui::SliderInt("MSAA Count", &multisampleCount, 1, 9)) {
 
                     }
+                    ImGui::EndTabItem();
                 }
-                if (ImGui::AddTab("GUI")) {
+                if (ImGui::BeginTabItem("GUI")) {
                     ImGui::Text("Tab 2");
+                    ImGui::EndTabItem();
                 }
-                if (ImGui::AddTab("Tab Name")) {
+                if (ImGui::BeginTabItem("Tab Name")) {
                     ImGui::Text("Tab 3");
+                    ImGui::EndTabItem();
                 }
-                if (ImGui::AddTab("Tab Name")) {
+                if (ImGui::BeginTabItem("Tab Name")) {
                     ImGui::Text("Tab 4");
+                    ImGui::EndTabItem();
                 }
                 ImGui::EndTabBar();
 
-                ImGui::BeginTabBar("Empty");
+                ImGui::BeginTabBar("Empty", ImGuiTabBarFlags_None);
                 ImGui::EndTabBar();
 
                 ImGui::Dummy(ImVec2(0, 20));
 
-                ImGui::BeginTabBar("#Additional Parameters");
+                ImGui::BeginTabBar("#Additional Parameters", ImGuiTabBarFlags_None);
                 float value = 0.0f;
-                if (ImGui::AddTab("Tab Name2")) {
+                if (ImGui::BeginTabItem("Tab Name2")) {
                     ImGui::SliderFloat("Slider", &value, 0, 1.0f);
+                    ImGui::EndTabItem();
                 }
-                if (ImGui::AddTab("Tab Name3")) {
+                if (ImGui::BeginTabItem("Tab Name3")) {
                     ImGui::Text("Tab 2");
+                    ImGui::EndTabItem();
                 }
-                if (ImGui::AddTab("Tab Name4")) {
+                if (ImGui::BeginTabItem("Tab Name4")) {
                     ImGui::Text("Tab 3");
+                    ImGui::EndTabItem();
                 }
-                if (ImGui::AddTab("Tab Name5")) {
+                if (ImGui::BeginTabItem("Tab Name5")) {
                     ImGui::Text("Tab 4");
+                    ImGui::EndTabItem();
                 }
                 ImGui::EndTabBar();
                 ImGui::End();
@@ -139,10 +162,14 @@ int main(int argc, char* argv[])
             glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
             glClear(GL_COLOR_BUFFER_BIT);
             ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             glfwSwapBuffers(window);
         }
 
+	ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
+        ImPlot::DestroyContext();
+        ImGui::DestroyContext();
 
         glfwDestroyWindow(window);
         glfwTerminate();

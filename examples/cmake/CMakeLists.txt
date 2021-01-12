@@ -8,7 +8,10 @@ endif()
 
 add_executable(${PROJECT_NAME}
     main.cpp
-    imgui_demo.cpp
+    ../../imgui_demo.cpp
+    ../../implot/implot_demo.cpp
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE ::imgui)
+
+find_library(GLES2_LIBRARY NAMES GLESv2 libGLESv2.lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE ::imgui ${GLES2_LIBRARY})
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
