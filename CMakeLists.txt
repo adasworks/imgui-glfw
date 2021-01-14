@@ -6,7 +6,6 @@ set(imgui_dir ${CMAKE_CURRENT_LIST_DIR})
 
 find_package(glm REQUIRED)
 find_package(glfw3 REQUIRED)
-find_package(GLEW QUIET CONFIG)
 
 set(imgui_public_hdrs
     ${imgui_dir}/imgui.h
@@ -17,8 +16,7 @@ set(imgui_public_hdrs
     ${imgui_dir}/imstb_truetype.h
     ${imgui_dir}/implot/implot.h
     ${imgui_dir}/implot/implot_internal.h
-    ${imgui_dir}/examples/imgui_impl_opengl3.h
-    ${imgui_dir}/examples/imgui_impl_glfw.h
+    ${imgui_dir}/imgui_glfw.h
 )
 
 add_library(imgui
@@ -28,8 +26,7 @@ add_library(imgui
     ${imgui_dir}/imgui.cpp
     ${imgui_dir}/imgui_draw.cpp
     ${imgui_dir}/imgui_widgets.cpp
-    ${imgui_dir}/examples/imgui_impl_opengl3.cpp
-    ${imgui_dir}/examples/imgui_impl_glfw.cpp
+    ${imgui_dir}/imgui_glfw.cpp
 )
 add_library(::imgui ALIAS imgui)
 target_include_directories(imgui PUBLIC
@@ -40,22 +37,18 @@ target_link_libraries(imgui
     PUBLIC glfw
     PRIVATE glm
 )
-set_target_properties(imgui PROPERTIES DEBUG_POSTFIX d)
-if (GLEW_FOUND)
-    message(STATUS "GLEW found")
-    target_link_libraries(imgui PRIVATE GLEW::glew_s)
-    target_compile_definitions(imgui PRIVATE -DHAVE_GLEW)
-else()
-    message(STATUS "GLEW not found")
+if (WIN32)
+    find_path(GLES2_INCLUDE_DIRS GLES2/gl2.h)
+    target_include_directories(imgui PRIVATE ${GLES2_INCLUDE_DIRS})
 endif()
-
+set_target_properties(imgui PROPERTIES DEBUG_POSTFIX d)
 configure_file(imgui-config.cmake.in imgui-config.cmake @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/imgui-config.cmake DESTINATION lib/cmake/imgui)
 install(TARGETS imgui EXPORT imgui-targets DESTINATION lib)
 install(FILES ${imgui_public_hdrs} DESTINATION include/imgui)
 install(EXPORT imgui-targets NAMESPACE :: DESTINATION lib/cmake/imgui)
 
-option(BUILD_SAMPLES "Build example projects with cmake support" OFF)
+option(BUILD_SAMPLES "Build example projects with cmake support" ON)
 if (BUILD_SAMPLES)
     add_subdirectory(examples/cmake)
     install(DIRECTORY examples/cmake/ DESTINATION examples/imgui_demo)

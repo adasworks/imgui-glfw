@@ -2,8 +2,7 @@
 #include <cstdio>
 
 #include <GLFW/glfw3.h>
-#include "examples/imgui_impl_opengl3.h"
-#include "examples/imgui_impl_glfw.h"
+#include "imgui_glfw.h"
 #include "implot/implot.h"
 
 #define THROW_IF(x,msg) { if ((x)) { throw std::runtime_error(msg); } }
@@ -28,9 +27,7 @@ int main(int argc, char* argv[])
         ImGui::CreateContext();
         ImPlot::CreateContext();
         ImPlot::SetImGuiContext(ImGui::GetCurrentContext());
-
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 100");
+        ImGui_ImplGlfw_Init(window, true);
 
         printf("GL_RENDERER: %s\n", glGetString(GL_RENDERER));
         printf("GL_VERSION:  %s\n", glGetString(GL_VERSION));
@@ -56,10 +53,8 @@ int main(int argc, char* argv[])
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
-            ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
-
 
             // 1. Show a simple window
             // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
@@ -162,12 +157,11 @@ int main(int argc, char* argv[])
             glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
             glClear(GL_COLOR_BUFFER_BIT);
             ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            ImGui_ImplGlfw_RenderDrawLists(ImGui::GetDrawData());
             glfwSwapBuffers(window);
         }
 
-	ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
         ImPlot::DestroyContext();
         ImGui::DestroyContext();
 
