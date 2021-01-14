@@ -55,7 +55,7 @@ install(TARGETS imgui EXPORT imgui-targets DESTINATION lib)
 install(FILES ${imgui_public_hdrs} DESTINATION include/imgui)
 install(EXPORT imgui-targets NAMESPACE :: DESTINATION lib/cmake/imgui)
 
-option(BUILD_SAMPLES "Build example projects with cmake support" ON)
+option(BUILD_SAMPLES "Build example projects with cmake support" OFF)
 if (BUILD_SAMPLES)
     add_subdirectory(examples/cmake)
     install(DIRECTORY examples/cmake/ DESTINATION examples/imgui_demo)
