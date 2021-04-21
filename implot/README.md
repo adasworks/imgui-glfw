@@ -25,6 +25,7 @@ ImPlot is an immediate mode, GPU accelerated plotting library for [Dear ImGui](h
     - stair plots
     - pie charts
     - heatmap charts
+    - 1D/2D histograms
     - images
     - and more likely to come
 - mix/match multiple plot items on a single plot
@@ -34,15 +35,14 @@ ImPlot is an immediate mode, GPU accelerated plotting library for [Dear ImGui](h
 - up to three independent y-axes
 - controls for zooming, panning, box selection, and auto-fitting data
 - controls for creating persistent query ranges (see demo)
-- remappable input controls
 - several plot styling options: 10 marker types, adjustable marker sizes, line weights, outline colors, fill colors, etc.
-- 10 built-in and user definable colormaps
+- 16 built-in colormaps and support for and user-added colormaps
 - optional plot titles, axis labels, and grid labels
 - optional and configurable legends with toggle buttons to quickly show/hide plot items
-- default styling based on current ImGui theme, but most elements can be customized independently
+- default styling based on current ImGui theme, or completely custom plot styles
 - customizable data getters and data striding (just like ImGui:PlotLine)
 - accepts data as float, double, and 8, 16, 32, and 64-bit signed/unsigned integral types
-- and more! (see [Announcements](https://github.com/epezent/implot/issues/48))
+- and more! (see Announcements [2020](https://github.com/epezent/implot/issues/48)/[2021](https://github.com/epezent/implot/issues/168))
 
 ## Usage
 
@@ -135,7 +135,7 @@ A: Yes. Up to three y-axes can be enabled. Multiple x-axes are not supported.
 
 **Q: Does ImPlot support [insert plot type]?**
 
-A: Maybe. Check the demo, gallery, or [Announcements](https://github.com/epezent/implot/issues/48) to see if your desired plot type is shown. If not, consider submitting an issue or better yet, a PR!
+A: Maybe. Check the demo, gallery, or Announcements ([2020](https://github.com/epezent/implot/issues/48)/[2021](https://github.com/epezent/implot/issues/168))to see if your desired plot type is shown. If not, consider submitting an issue or better yet, a PR!
 
 **Q: Does ImPlot support 3D plots?**
 
